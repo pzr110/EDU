@@ -2,18 +2,22 @@ package com.jlf.mvpdemo.contract;
 
 import com.jlf.mvpdemo.basemvp.IBasePresenter;
 import com.jlf.mvpdemo.basemvp.IBaseView;
+import com.jlf.mvpdemo.bean.BannerBean;
+
+import java.util.List;
 
 import okhttp3.Callback;
 
 public interface HomeContract {
     interface IHomeModel {
-        void requestBaidu(Callback callback);
+        void getBannerData(CallBackListener<List<BannerBean>, String> callBackListener);
     }
 
     interface IHomeView extends IBaseView {
-        void showDialog();
 
-        void succes(String content);
+        void success(List<BannerBean> content);
+
+        void failed(String error);
     }
 
     interface IHomePresenter extends IBasePresenter {

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.chaychan.library.BottomBarItem;
@@ -33,7 +34,7 @@ import java.util.List;
  * MVP 的写法，Version 6: 静态代理，消除重复代码
  */
 public class MainActivity extends BaseActivity implements MainContract.IMainView {
-    private NoScrollViewPager mViewPager;
+    private ViewPager2 mViewPager;
     private BottomBarLayout mBottomBarLayout;
 
     private MyAdapter mAdapter;
@@ -72,31 +73,16 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
         list.add(new HomeFragment());
         list.add(new CourseFragment());
         list.add(new MineFragment());
-        mViewPager.setOffscreenPageLimit(2);
-        mViewPager.setScrollable(true); // 允许滑动
-        mAdapter = new MyAdapter(getSupportFragmentManager());
-        mAdapter.setList(list);
+        mAdapter = new MyAdapter(this, list);
         mViewPager.setAdapter(mAdapter);
 
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            //滑动时
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            //页面选中时
+        mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 mBottomBarLayout.onPageSelected(position);
             }
-
-            //滑动状态改变时
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
         });
+
 
         mBottomBarLayout.setOnItemSelectedListener(new BottomBarLayout.OnItemSelectedListener() {
             @Override

@@ -7,7 +7,7 @@ import com.jlf.mvpdemo.bean.User;
 public interface LoginContract {
 
     interface ILoginModel {
-        void login(String username, String password, UserLoginListener userLoginListener);
+        void login(String username, String password, CallBackListener<User,String> callBackListener);
     }
 
     interface ILoginView extends IBaseView {

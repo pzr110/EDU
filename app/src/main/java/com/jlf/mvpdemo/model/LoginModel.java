@@ -5,7 +5,7 @@ import android.util.Log;
 import com.jlf.mvpdemo.basemvp.BaseModel;
 import com.jlf.mvpdemo.bean.User;
 import com.jlf.mvpdemo.contract.LoginContract;
-import com.jlf.mvpdemo.contract.UserLoginListener;
+import com.jlf.mvpdemo.contract.CallBackListener;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -14,7 +14,7 @@ import cn.bmob.v3.listener.SaveListener;
 public class LoginModel extends BaseModel implements LoginContract.ILoginModel {
 
     @Override
-    public void login(String username, String password, UserLoginListener userLoginListener) {
+    public void login(String username, String password, CallBackListener<User,String> callBackListener) {
         final User user = new User();
         //此处替换为你的用户名
         user.setUsername(username);
@@ -27,9 +27,9 @@ public class LoginModel extends BaseModel implements LoginContract.ILoginModel {
                 if (e == null) {
 
                     User user = BmobUser.getCurrentUser(User.class);
-                    userLoginListener.loginSuccess(user);
+                    callBackListener.success(user);
                 } else {
-                    userLoginListener.loginFailed(e.toString());
+                    callBackListener.failed(e.toString());
                     Log.e("BmobPZR","Error"+e.toString());
 
                 }
