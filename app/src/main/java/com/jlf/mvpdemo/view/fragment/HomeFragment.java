@@ -48,7 +48,6 @@ public class HomeFragment extends BaseFragment implements HomeContract.IHomeView
     @Override
     protected void initData() {
         mPresenter.handlerData();
-
     }
 
 
@@ -70,6 +69,7 @@ public class HomeFragment extends BaseFragment implements HomeContract.IHomeView
     @Override
     public void failed(String error) {
         ToastUtils.showShort("网络错误" + error);
+        Log.e("TAG","Err: "+error);
     }
 
 

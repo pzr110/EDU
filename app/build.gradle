@@ -71,5 +71,11 @@ dependencies {
 
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
+    // 圆角图片
+    implementation 'com.github.ai2101039:YLCircleImageView:v1.0.7'
+
+    // 下拉
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
 
 }

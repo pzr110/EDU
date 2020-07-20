@@ -39,7 +39,7 @@ public class MineFragment extends BaseFragment implements MineContract.IMineView
     @Override
     public void success(User user) {
         String nick = user.getNick();
-        mTvNick.setText("成功"+nick);
+        mTvNick.setText("成功" + nick);
     }
 
     @Override
