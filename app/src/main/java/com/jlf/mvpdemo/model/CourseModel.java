@@ -1,6 +1,7 @@
 package com.jlf.mvpdemo.model;
 
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.jlf.mvpdemo.basemvp.BaseModel;
 import com.jlf.mvpdemo.bean.CourseBean;
@@ -18,24 +19,23 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 public class CourseModel extends BaseModel implements CourseContract.ICourseModel {
-    String lastTime = null;
-    private int curPage = 0; // 当前页的编号，从0开始
+
 
     @Override
     public void getCourseList(int pageNum, boolean isRefresh, CallBackListener<List<CourseBean>, String> callBackListener) {
         BmobQuery<CourseBean> query = new BmobQuery<>();
+        query.setLimit(5);
+        query.setSkip(pageNum * 5);
+        Log.e("TAGA", "pageNum: " + pageNum);
         query.order("-createdAt");
-//        query.setLimit(2);
         query.findObjects(new FindListener<CourseBean>() {
             @Override
             public void done(List<CourseBean> list, BmobException e) {
                 if (e == null) {
-                    if (list.size()>0){
-                        if (isRefresh){
-                            curPage = 0;
-                        }
-                    }
+
                     callBackListener.success(list);
+                    Log.e("TAGA", "list: " + list.size());
+
                 } else {
                     callBackListener.failed(e.getMessage());
                 }

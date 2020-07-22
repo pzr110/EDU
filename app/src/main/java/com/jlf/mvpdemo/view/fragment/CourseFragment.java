@@ -1,6 +1,7 @@
 package com.jlf.mvpdemo.view.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -31,7 +32,7 @@ public class CourseFragment extends BaseFragment implements CourseContract.ICour
     private CourseAdapter mAdapter;
 
 
-    private int pageNum = 1;//分页的值
+    private int pageNum = 0;//分页的值
     @InjectPresenter
     private CoursePresenter mPresenter;
 
@@ -69,7 +70,7 @@ public class CourseFragment extends BaseFragment implements CourseContract.ICour
 
     @Override
     protected void initData() {
-        mPresenter.handlerData(true,0);
+        mPresenter.handlerData(true, 0);
 
         initListener();
     }
@@ -81,7 +82,10 @@ public class CourseFragment extends BaseFragment implements CourseContract.ICour
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.handlerData(true,0);
+                if (pageNum > 0) {
+                    pageNum = 0;
+                }
+                mPresenter.handlerData(true, 0);
             }
         });
 
@@ -95,6 +99,15 @@ public class CourseFragment extends BaseFragment implements CourseContract.ICour
             }
         });
 
+        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                Log.e("TAGA", "onLoadMoreRequested");
+                pageNum++;
+                mPresenter.handlerData(false, pageNum);
+            }
+        }, mRecyclerView);
+
         /**
          * 上拉加载
          */
@@ -102,6 +115,7 @@ public class CourseFragment extends BaseFragment implements CourseContract.ICour
 //        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
 //            @Override
 //            public void onLoadMoreRequested() {
+//                Log.e("TAGA", "onLoadMoreRequested");
 //                pageNum++;
 //                mPresenter.handlerData(false, pageNum);
 //            }
@@ -119,14 +133,18 @@ public class CourseFragment extends BaseFragment implements CourseContract.ICour
             // 此时是刷新
             mAdapter.setNewData(courseBeanList);
         } else {
+            Log.e("TAGA", "上拉----------");
             mAdapter.addData(courseBeanList);
         }
 
-//        if (pageNum>0){
-//            mAdapter.loadMoreEnd();
-//        }else {
-//            mAdapter.loadMoreComplete();
-//        }
+
+        if (courseBeanList.size() < 5) {
+            Log.e("TAGA", "loadMoreEnd");
+            mAdapter.loadMoreEnd();
+        } else {
+            Log.e("TAGA", "loadMoreComplete");
+            mAdapter.loadMoreComplete();
+        }
 
     }
 

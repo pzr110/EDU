@@ -76,6 +76,7 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
         list.add(new CourseFragment());
         list.add(new MineFragment());
         mAdapter = new MyAdapter(this, list);
+        mViewPager.setUserInputEnabled(false);
         mViewPager.setAdapter(mAdapter);
 
         mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
