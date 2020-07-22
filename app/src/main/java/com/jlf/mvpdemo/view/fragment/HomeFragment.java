@@ -1,6 +1,7 @@
 package com.jlf.mvpdemo.view.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.jlf.mvpdemo.bean.RecommendBean;
 import com.jlf.mvpdemo.contract.HomeContract;
 import com.jlf.mvpdemo.inject.InjectPresenter;
 import com.jlf.mvpdemo.presenter.HomePresenter;
+import com.jlf.mvpdemo.view.RecommendActivity;
 import com.jlf.mvpdemo.view.adapter.CourseAdapter;
 import com.jlf.mvpdemo.view.adapter.ImageNetAdapter;
 import com.jlf.mvpdemo.view.adapter.RecommendAdapter;
@@ -114,7 +116,10 @@ public class HomeFragment extends BaseFragment implements HomeContract.IHomeView
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
+                RecommendBean recommendBean = mAdapter.getData().get(position);
+                Intent intent = new Intent(HomeFragment.this.getActivity(), RecommendActivity.class);
+                intent.putExtra("recommendBean", recommendBean);
+                startActivity(intent);
             }
         });
 

@@ -1,11 +1,14 @@
 package com.jlf.mvpdemo.bean;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 
-public class RecommendBean extends BmobObject {
+public class RecommendBean extends BmobObject implements Serializable {
 
+    private static final long serialVersionUID = -2769774858750156324L;
     private String coverUrl;
-//    private String videoUrl;
+    //    private String videoUrl;
     private String title;
     private String content;
     private String author;
