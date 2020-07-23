@@ -9,19 +9,31 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.util.BarUtils;
+import com.jlf.mvpdemo.R;
 import com.jlf.mvpdemo.proxy.ProxyActivity;
+import com.mirkowu.basetoolbar.BaseToolbar;
 
-public abstract class BaseActivity extends AppCompatActivity implements IBaseView ,View.OnClickListener{
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+
+
+public abstract class BaseActivity extends AppCompatActivity implements IBaseView, View.OnClickListener {
 
     private ProxyActivity mProxyActivity;
 
-    protected abstract void initLayout(@Nullable Bundle savedInstanceState);
+    private BaseToolbar mBaseToolbar;
+
+//    protected abstract void initLayout(@Nullable Bundle savedInstanceState);
 
     protected abstract void initViews();
 
@@ -42,7 +54,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         BarUtils.setStatusBarColor(this, Color.argb(0, 0, 0, 0));
         BarUtils.setStatusBarLightMode(this, true);
 
-        initLayout(savedInstanceState);
+        initContentView();
+//        initLayout(savedInstanceState);
 
         mProxyActivity = createProxyActivity();
         mProxyActivity.bindPresenter();
@@ -50,6 +63,61 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         initViews();
         initData();
     }
+
+    /**
+     * 这里设置可以不用每次都布局文件写Toolbar，只需代码配置
+     */
+    protected void initContentView() {
+        /*** 这里可以对Toolbar进行统一的预设置 */
+        BaseToolbar.Builder builder
+                = new BaseToolbar.Builder(this)
+                .setStatusBarColor(Color.argb(255,255,255,255))//统一设置颜色
+                .setBackButton(R.drawable.ic_black_back)//统一设置返回键
+                .setBackgroundColor(ContextCompat.getColor(this, R.color.colorWhite))
+                .setTitleTextColor(ContextCompat.getColor(this, R.color.color333333));
+
+        builder = setToolbar(builder);
+        if (builder != null) {
+            mBaseToolbar = builder.build();
+        }
+        if (mBaseToolbar != null) {
+            //添加Toolbar
+            LinearLayout layout = new LinearLayout(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+            layout.setLayoutParams(params);
+            layout.setOrientation(LinearLayout.VERTICAL);
+            layout.addView(mBaseToolbar);
+            View mView = getLayoutInflater().inflate(getLayoutId(), layout, false);
+            layout.addView(mView);
+            setContentView(layout);
+            //将toolbar设置为actionbar
+            setSupportActionBar(mBaseToolbar);
+        } else {
+            setContentView(getLayoutId());
+        }
+
+    }
+
+    public void showToolbar() {
+        if (mBaseToolbar != null) mBaseToolbar.setVisibility(View.VISIBLE);
+    }
+
+    public void hideToolbar() {
+        if (mBaseToolbar != null) mBaseToolbar.setVisibility(View.GONE);
+    }
+
+
+    @LayoutRes
+    protected abstract int getLayoutId();
+
+    /**
+     * 不需要toolbar的 可以不用管
+     *
+     * @return
+     */
+    @Nullable
+    protected abstract BaseToolbar.Builder setToolbar(@NonNull BaseToolbar.Builder builder);
+
 
     @SuppressWarnings("unchecked")
     private ProxyActivity createProxyActivity() {

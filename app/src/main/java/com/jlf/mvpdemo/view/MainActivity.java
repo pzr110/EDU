@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -27,6 +28,7 @@ import com.jlf.mvpdemo.view.adapter.MyAdapter;
 import com.jlf.mvpdemo.view.fragment.CourseFragment;
 import com.jlf.mvpdemo.view.fragment.HomeFragment;
 import com.jlf.mvpdemo.view.fragment.MineFragment;
+import com.mirkowu.basetoolbar.BaseToolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +45,10 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
     @InjectPresenter
     private MainPresenter mPresenter;
 
-    @Override
-    protected void initLayout(@Nullable Bundle savedInstanceState) {
-        setContentView(R.layout.activity_main);
-    }
+//    @Override
+//    protected void initLayout(@Nullable Bundle savedInstanceState) {
+//        setContentView(R.layout.activity_main);
+//    }
 
     @Override
     protected void initViews() {
@@ -63,6 +65,17 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
         initBottom();
 
 //        mPresenter.handlerData();
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Nullable
+    @Override
+    protected BaseToolbar.Builder setToolbar(@NonNull BaseToolbar.Builder builder) {
+        return null;
     }
 
     @Override

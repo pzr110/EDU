@@ -80,5 +80,5 @@ dependencies {
     // HTML 解析
     implementation 'org.jsoup:jsoup:1.12.1'
 
-
+    implementation 'com.mirkowu:BaseToolbar:0.0.7'
 }

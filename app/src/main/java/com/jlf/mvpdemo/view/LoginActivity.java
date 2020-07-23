@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.ActivityUtils;
@@ -19,6 +20,7 @@ import com.jlf.mvpdemo.bean.User;
 import com.jlf.mvpdemo.contract.LoginContract;
 import com.jlf.mvpdemo.inject.InjectPresenter;
 import com.jlf.mvpdemo.presenter.LoginPresenter;
+import com.mirkowu.basetoolbar.BaseToolbar;
 import com.wang.avi.AVLoadingIndicatorView;
 
 public class LoginActivity extends BaseActivity implements LoginContract.ILoginView {
@@ -31,10 +33,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.ILoginV
     @InjectPresenter
     private LoginPresenter mPresenter;
 
-    @Override
-    protected void initLayout(@Nullable Bundle savedInstanceState) {
-        setContentView(R.layout.activity_login);
-    }
+//    @Override
+//    protected void initLayout(@Nullable Bundle savedInstanceState) {
+//        setContentView(R.layout.activity_login);
+//    }
 
     @Override
     protected void initViews() {
@@ -60,6 +62,17 @@ public class LoginActivity extends BaseActivity implements LoginContract.ILoginV
         }
 
 
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_login;
+    }
+
+    @Nullable
+    @Override
+    protected BaseToolbar.Builder setToolbar(@NonNull BaseToolbar.Builder builder) {
+        return null;
     }
 
     @Override
