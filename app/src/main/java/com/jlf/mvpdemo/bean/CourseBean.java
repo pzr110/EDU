@@ -1,13 +1,31 @@
 package com.jlf.mvpdemo.bean;
 
-import cn.bmob.v3.BmobObject;
+import java.io.Serializable;
 
-public class CourseBean extends BmobObject {
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobPointer;
+
+public class CourseBean extends BmobObject implements Serializable {
+
+    private static final long serialVersionUID = -7253644179809684032L;
 
     private String coverUrl;
     private String videoUrl;
     private String title;
     private String author;
+
+    private String content;
+
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+
 
     public String getCoverUrl() {
         return coverUrl;

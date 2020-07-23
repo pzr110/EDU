@@ -1,11 +1,11 @@
 package com.jlf.mvpdemo.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -19,6 +19,7 @@ import com.jlf.mvpdemo.contract.CourseContract;
 import com.jlf.mvpdemo.inject.InjectPresenter;
 import com.jlf.mvpdemo.presenter.CoursePresenter;
 import com.jlf.mvpdemo.utils.GridSpacingItemDecoration;
+import com.jlf.mvpdemo.view.CourseDetailActivity;
 import com.jlf.mvpdemo.view.adapter.CourseAdapter;
 
 import java.util.ArrayList;
@@ -95,10 +96,18 @@ public class CourseFragment extends BaseFragment implements CourseContract.ICour
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                CourseBean courseBean = mAdapter.getData().get(position);
 
+                Intent intent = new Intent(CourseFragment.this.getActivity(), CourseDetailActivity.class);
+                intent.putExtra("courseBean", courseBean);
+                startActivity(intent);
             }
         });
 
+
+        /**
+         * 上拉加载
+         */
         mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
@@ -108,18 +117,7 @@ public class CourseFragment extends BaseFragment implements CourseContract.ICour
             }
         }, mRecyclerView);
 
-        /**
-         * 上拉加载
-         */
 
-//        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-//            @Override
-//            public void onLoadMoreRequested() {
-//                Log.e("TAGA", "onLoadMoreRequested");
-//                pageNum++;
-//                mPresenter.handlerData(false, pageNum);
-//            }
-//        });
     }
 
 

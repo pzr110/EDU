@@ -8,10 +8,18 @@ public class RecommendBean extends BmobObject implements Serializable {
 
     private static final long serialVersionUID = -2769774858750156324L;
     private String coverUrl;
-    //    private String videoUrl;
     private String title;
+    private String subhead;
     private String content;
     private String author;
+
+    public String getSubhead() {
+        return subhead;
+    }
+
+    public void setSubhead(String subhead) {
+        this.subhead = subhead;
+    }
 
     public String getContent() {
         return content;
@@ -28,14 +36,6 @@ public class RecommendBean extends BmobObject implements Serializable {
     public void setCoverUrl(String coverUrl) {
         this.coverUrl = coverUrl;
     }
-
-//    public String getVideoUrl() {
-//        return videoUrl;
-//    }
-//
-//    public void setVideoUrl(String videoUrl) {
-//        this.videoUrl = videoUrl;
-//    }
 
     public String getTitle() {
         return title;

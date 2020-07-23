@@ -35,6 +35,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
 
 //    protected abstract void initLayout(@Nullable Bundle savedInstanceState);
 
+    @LayoutRes
+    protected abstract int getLayoutId();
+
     protected abstract void initViews();
 
     protected abstract void initData();
@@ -107,8 +110,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     }
 
 
-    @LayoutRes
-    protected abstract int getLayoutId();
+
 
     /**
      * 不需要toolbar的 可以不用管

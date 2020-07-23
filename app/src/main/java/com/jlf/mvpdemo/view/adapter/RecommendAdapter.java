@@ -9,7 +9,6 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.jlf.mvpdemo.R;
-import com.jlf.mvpdemo.bean.CourseBean;
 import com.jlf.mvpdemo.bean.RecommendBean;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class RecommendAdapter extends BaseQuickAdapter<RecommendBean, BaseViewHo
     @Override
     protected void convert(BaseViewHolder helper, RecommendBean item) {
         helper.setText(R.id.tv_title, item.getTitle())
-                .setText(R.id.tv_content, item.getContent())
+                .setText(R.id.tv_content, item.getSubhead())
                 .setText(R.id.tv_author, item.getAuthor())
                 .setText(R.id.tv_createdAt, item.getCreatedAt());
 
