@@ -77,7 +77,7 @@ public class CourseDetailActivity extends BaseActivity {
         List<Fragment> fragmentList = new ArrayList<>();
 
         fragmentList.add(new CourseInfoFragment(mCourseBean));
-        fragmentList.add(new CourseListFragment());
+        fragmentList.add(new CourseListFragment(mCourseBean.getObjectId()));
 
         mViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList, tabTitle));
         mViewPager.setOffscreenPageLimit(1);
