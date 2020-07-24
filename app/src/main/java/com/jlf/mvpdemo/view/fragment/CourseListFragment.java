@@ -1,6 +1,7 @@
 package com.jlf.mvpdemo.view.fragment;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.jlf.mvpdemo.view.adapter.CourseAdapter;
 import com.jlf.mvpdemo.view.adapter.SubCourseAdapter;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class CourseListFragment extends BaseFragment implements CourseListContract.ICourseListView {
@@ -58,7 +60,9 @@ public class CourseListFragment extends BaseFragment implements CourseListContra
 
         initView();
 
+
     }
+
 
     private void initView() {
 
@@ -101,6 +105,13 @@ public class CourseListFragment extends BaseFragment implements CourseListContra
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                SubCourseBean subCourseBean = mAdapter.getData().get(position);
+
+                Intent intent = new Intent();
+                intent.setAction("com.pzr.mvpdemo");
+                intent.putExtra("subCourseBean", subCourseBean);
+                getActivity().sendBroadcast(intent);
 
             }
         });

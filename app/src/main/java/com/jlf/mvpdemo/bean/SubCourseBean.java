@@ -1,6 +1,7 @@
 package com.jlf.mvpdemo.bean;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 
 import cn.bmob.v3.BmobObject;
 
@@ -10,13 +11,13 @@ public class SubCourseBean extends BmobObject implements Serializable {
     private String name;
     private String serial;
     private String duration;
-    private String videoUrl;
+    private LinkedHashMap<String, String> videoUrl;
 
-    public String getVideoUrl() {
+    public LinkedHashMap<String, String> getVideoUrl() {
         return videoUrl;
     }
 
-    public void setVideoUrl(String videoUrl) {
+    public void setVideoUrl(LinkedHashMap<String, String> videoUrl) {
         this.videoUrl = videoUrl;
     }
 

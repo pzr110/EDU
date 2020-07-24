@@ -1,6 +1,9 @@
 package com.jlf.mvpdemo.view;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.util.Log;
@@ -50,7 +53,20 @@ public class CourseDetailActivity extends BaseActivity {
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
     private CourseBean mCourseBean;
+    private MyBroadcastReceiver mReceiver;
 
+    private class MyBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            SubCourseBean subCourseBean = (SubCourseBean) intent.getSerializableExtra("subCourseBean");
+            LinkedHashMap<String, String> videoUrl = subCourseBean.getVideoUrl();
+
+            initPlayer(videoUrl);
+
+        }
+
+
+    }
 
     @Override
     protected int getLayoutId() {
@@ -69,7 +85,17 @@ public class CourseDetailActivity extends BaseActivity {
         mCourseBean = (CourseBean) intent.getSerializableExtra("courseBean");
 
         initTabView();
+        doRegisterReceiver();
 
+    }
+
+    /**
+     * 动态注册广播
+     */
+    private void doRegisterReceiver() {
+        mReceiver = new MyBroadcastReceiver();
+        IntentFilter filter = new IntentFilter("com.pzr.mvpdemo");
+        registerReceiver(mReceiver, filter);
     }
 
     private void initTabView() {
@@ -87,18 +113,18 @@ public class CourseDetailActivity extends BaseActivity {
     @Override
     protected void initData() {
 
-        initPlayer();
+        initPlayer(mCourseBean.getVideoUrl());
 
     }
 
 
-    private void initPlayer() {
+    public void initPlayer(LinkedHashMap<String, String> videoUrl) {
 
         assert mCourseBean != null;
         String videoName = mCourseBean.getVideoName();
         String coverUrl = mCourseBean.getCoverUrl();
 
-        LinkedHashMap<String, String> videoUrl = mCourseBean.getVideoUrl();
+//        LinkedHashMap<String, String> videoUrl = videoUrl;
 
         /**播放资源*/
         List<VideoijkBean> list = new ArrayList<VideoijkBean>();
@@ -214,6 +240,8 @@ public class CourseDetailActivity extends BaseActivity {
         if (player != null) {
             player.onDestroy();
         }
+
+        unregisterReceiver(mReceiver);
     }
 
     @Override

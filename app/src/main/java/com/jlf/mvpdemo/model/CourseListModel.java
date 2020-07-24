@@ -26,7 +26,7 @@ public class CourseListModel extends BaseModel implements CourseListContract.ICo
         query.setLimit(5);
         query.setSkip(pageNum * 5);
         Log.e("TAGA", "pageNum: " + pageNum);
-        query.order("-createdAt");
+        query.order("+createdAt");
 
         query.findObjects(new FindListener<SubCourseBean>() {
             @Override
