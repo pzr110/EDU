@@ -49,6 +49,7 @@ public class CourseDetailActivity extends BaseActivity {
 
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
+    private CourseBean mCourseBean;
 
 
     @Override
@@ -64,6 +65,9 @@ public class CourseDetailActivity extends BaseActivity {
         mSlidingTabLayout = $(R.id.slidingTabLayout);
         mViewPager = $(R.id.viewPager);
 
+        Intent intent = getIntent();
+        mCourseBean = (CourseBean) intent.getSerializableExtra("courseBean");
+
         initTabView();
 
     }
@@ -72,7 +76,7 @@ public class CourseDetailActivity extends BaseActivity {
         String[] tabTitle = {"课程简介", "课程目录"};
         List<Fragment> fragmentList = new ArrayList<>();
 
-        fragmentList.add(new CourseInfoFragment());
+        fragmentList.add(new CourseInfoFragment(mCourseBean));
         fragmentList.add(new CourseListFragment());
 
         mViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList, tabTitle));
@@ -89,13 +93,12 @@ public class CourseDetailActivity extends BaseActivity {
 
 
     private void initPlayer() {
-        Intent intent = getIntent();
-        CourseBean courseBean = (CourseBean) intent.getSerializableExtra("courseBean");
-        assert courseBean != null;
-        String videoName = courseBean.getVideoName();
-        String coverUrl = courseBean.getCoverUrl();
 
-        LinkedHashMap<String, String> videoUrl = courseBean.getVideoUrl();
+        assert mCourseBean != null;
+        String videoName = mCourseBean.getVideoName();
+        String coverUrl = mCourseBean.getCoverUrl();
+
+        LinkedHashMap<String, String> videoUrl = mCourseBean.getVideoUrl();
 
         /**播放资源*/
         List<VideoijkBean> list = new ArrayList<VideoijkBean>();
