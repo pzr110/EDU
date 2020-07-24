@@ -145,6 +145,7 @@ public class CourseDetailActivity extends BaseActivity {
 
         }
 
+
         /**播放器*/
         player = new PlayerView(this)
                 .setTitle(videoName)

@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <include
-        layout="@layout/simple_player_view_player"
+        layout="@layout/simple_player_view_player_my"
         android:layout_width="match_parent"
         android:layout_height="240dp" />
 
