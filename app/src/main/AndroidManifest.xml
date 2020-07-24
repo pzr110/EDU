@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jlf.mvpdemo">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
 
     <!--允许联网 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,18 +26,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.LoginActivity">
+        <activity
+            android:name=".view.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.SecondActivity" />
-        <activity android:name=".view.MainActivity" />
-        <activity android:name=".view.RecommendActivity" />
+        <activity
+            android:name=".view.SecondActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.RecommendActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.CourseDetailActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
 
         <meta-data

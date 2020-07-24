@@ -1,6 +1,10 @@
 package com.jlf.mvpdemo.bean;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobPointer;
@@ -10,12 +14,28 @@ public class CourseBean extends BmobObject implements Serializable {
     private static final long serialVersionUID = -7253644179809684032L;
 
     private String coverUrl;
-    private String videoUrl;
+    private String videoName;
+    private LinkedHashMap<String,String> videoUrl;
     private String title;
     private String author;
 
     private String content;
 
+    public String getVideoName() {
+        return videoName;
+    }
+
+    public void setVideoName(String videoName) {
+        this.videoName = videoName;
+    }
+
+    public LinkedHashMap<String, String> getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(LinkedHashMap<String, String> videoUrl) {
+        this.videoUrl = videoUrl;
+    }
 
     public String getContent() {
         return content;
@@ -35,13 +55,7 @@ public class CourseBean extends BmobObject implements Serializable {
         this.coverUrl = coverUrl;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
-    }
 
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
-    }
 
     public String getTitle() {
         return title;

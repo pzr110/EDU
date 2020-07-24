@@ -18,7 +18,9 @@ public class MyAdapter extends FragmentStateAdapter {
         mFragments = fragments;
     }
 
-    @NonNull
+
+
+        @NonNull
     @Override
     public Fragment createFragment(int position) {
         return mFragments.get(position);
