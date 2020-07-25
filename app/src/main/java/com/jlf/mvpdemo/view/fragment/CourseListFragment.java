@@ -1,10 +1,12 @@
 package com.jlf.mvpdemo.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -112,6 +114,16 @@ public class CourseListFragment extends BaseFragment implements CourseListContra
                 intent.setAction("com.pzr.mvpdemo");
                 intent.putExtra("subCourseBean", subCourseBean);
                 getActivity().sendBroadcast(intent);
+
+                for (int i = 0; i < mAdapter.getData().size(); i++) {
+                    if (i == position) {
+                        subCourseBean.setNowPlay(true);
+                    } else {
+                        mAdapter.getData().get(i).setNowPlay(false);
+                    }
+                }
+
+                mAdapter.changeTextColor();
 
             }
         });

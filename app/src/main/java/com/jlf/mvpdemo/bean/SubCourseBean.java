@@ -13,6 +13,16 @@ public class SubCourseBean extends BmobObject implements Serializable {
     private String duration;
     private LinkedHashMap<String, String> videoUrl;
 
+    private boolean nowPlay;
+
+    public boolean isNowPlay() {
+        return nowPlay;
+    }
+
+    public void setNowPlay(boolean nowPlay) {
+        this.nowPlay = nowPlay;
+    }
+
     public LinkedHashMap<String, String> getVideoUrl() {
         return videoUrl;
     }
