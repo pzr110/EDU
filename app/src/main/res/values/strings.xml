@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MVPDemo</string>
+    <string name="app_name">视频课程</string>
     <string name="str_login">登录</string>
     <string name="str_about"> MVP（model、view 、presenter），将 Activity 中的代码抽离了出来，把 Activity（Fragment、View） 只当作 View 层，通过一个 Presenter（契约层）将 View 和 Model 层联系起来，让 View 和 Model 层充分的解耦。
 \n我们访问网络得到数据并显示出来会是这样一个流程：

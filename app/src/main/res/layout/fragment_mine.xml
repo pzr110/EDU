@@ -15,7 +15,7 @@
         <com.android.library.YLCircleImageView
             android:layout_width="76dp"
             android:layout_height="76dp"
-            android:src="@drawable/img_head"
+            android:src="@drawable/ic_logo"
             app:radiusYL="50dp" />
 
         <TextView
