@@ -11,12 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.jlf.mvpdemo.R;
 import com.jlf.mvpdemo.basemvp.BaseFragment;
 import com.jlf.mvpdemo.bean.User;
 import com.jlf.mvpdemo.contract.MineContract;
 import com.jlf.mvpdemo.inject.InjectPresenter;
 import com.jlf.mvpdemo.presenter.MinePresenter;
+import com.jlf.mvpdemo.view.AboutActivity;
 import com.jlf.mvpdemo.view.UserInfoActivity;
 
 public class MineFragment extends BaseFragment implements MineContract.IMineView {
@@ -63,6 +65,13 @@ public class MineFragment extends BaseFragment implements MineContract.IMineView
                 startActivity(intent);
             }
         });
+
+        mLlAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityUtils.startActivity(AboutActivity.class);
+            }
+        });
     }
 
     @Override
@@ -77,7 +86,7 @@ public class MineFragment extends BaseFragment implements MineContract.IMineView
     public void success(User user) {
         this.mUser = user;
         String nick = user.getNick();
-        mTvNick.setText("成功" + nick);
+        mTvNick.setText(nick);
     }
 
     @Override

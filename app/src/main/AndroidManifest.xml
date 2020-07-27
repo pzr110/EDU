@@ -51,6 +51,9 @@
         <activity
             android:name=".view.UserInfoActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.AboutActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="design_width_in_dp"
