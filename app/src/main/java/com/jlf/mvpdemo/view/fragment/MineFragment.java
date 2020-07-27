@@ -1,6 +1,11 @@
 package com.jlf.mvpdemo.view.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -12,9 +17,15 @@ import com.jlf.mvpdemo.bean.User;
 import com.jlf.mvpdemo.contract.MineContract;
 import com.jlf.mvpdemo.inject.InjectPresenter;
 import com.jlf.mvpdemo.presenter.MinePresenter;
+import com.jlf.mvpdemo.view.UserInfoActivity;
 
 public class MineFragment extends BaseFragment implements MineContract.IMineView {
     private TextView mTvNick;
+    private LinearLayout mLlInfo;
+    private LinearLayout mLlService;
+    private LinearLayout mLlAbout;
+
+    private User mUser;
 
     @InjectPresenter
     private MinePresenter mPresenter;
@@ -28,16 +39,43 @@ public class MineFragment extends BaseFragment implements MineContract.IMineView
     protected void initViews(@Nullable Bundle savedInstanceState) {
 
         mTvNick = $(R.id.tv_nick);
+        mLlInfo = $(R.id.ll_info);
+        mLlService = $(R.id.ll_service);
+        mLlAbout = $(R.id.ll_about);
 
+
+    }
+
+    private void initListener() {
+        mLlService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + 110));//跳转到拨号界面，同时传递电话号码
+                startActivity(dialIntent);
+            }
+        });
+
+        mLlInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MineFragment.this.getActivity(), UserInfoActivity.class);
+                intent.putExtra("user", mUser);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     protected void initData() {
         mPresenter.handlerData();
+
+        initListener();
+
     }
 
     @Override
     public void success(User user) {
+        this.mUser = user;
         String nick = user.getNick();
         mTvNick.setText("成功" + nick);
     }
@@ -45,5 +83,12 @@ public class MineFragment extends BaseFragment implements MineContract.IMineView
     @Override
     public void failed(String error) {
         mTvNick.setText(error);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.handlerData();
     }
 }

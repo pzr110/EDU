@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jlf.mvpdemo">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 
     <!--允许联网 -->
@@ -47,6 +47,9 @@
         <activity
             android:name=".view.CourseDetailActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.UserInfoActivity"
             android:screenOrientation="portrait" />
 
         <meta-data

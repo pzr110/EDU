@@ -1,33 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/img_head_bg"
-        android:gravity="center"
-        android:orientation="vertical">
 
-        <com.android.library.YLCircleImageView
-            android:layout_width="76dp"
-            android:layout_height="76dp"
-            android:src="@drawable/img_head"
-            app:radiusYL="50dp" />
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/loading"
+        app:indicatorColor="@color/tab_selected_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 
-        <TextView
-            android:id="@+id/tv_nick"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="昵称11"
-            android:textColor="@color/colorWhite"
-            android:textSize="16sp" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,7 +22,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/ll_info"
+            android:id="@+id/ll_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -48,9 +33,43 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="个人中心"
+                android:text="登录账号"
                 android:textColor="@color/color333333"
                 android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Account"
+                android:textColor="@color/color333333"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorF2F2F2" />
+
+        <LinearLayout
+            android:id="@+id/ll_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="修改密码"
+                android:textColor="@color/color333333"
+                android:textSize="16sp" />
+
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -66,7 +85,7 @@
             android:background="@color/colorF2F2F2" />
 
         <LinearLayout
-            android:id="@+id/ll_service"
+            android:id="@+id/ll_nick"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -77,36 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="联系客服"
-                android:textColor="@color/color333333"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_right_arrow" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorF2F2F2" />
-
-        <LinearLayout
-            android:id="@+id/ll_about"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingVertical="15dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="关于我们"
+                android:text="修改昵称"
                 android:textColor="@color/color333333"
                 android:textSize="16sp" />
 
@@ -125,4 +115,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
