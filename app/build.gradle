@@ -103,7 +103,10 @@ dependencies {
 //    api 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.8'
 
     // IJKPlayer
-    implementation 'com.dou361.ijkplayer:jjdxm-ijkplayer:1.0.5'
+//    implementation 'com.dou361.ijkplayer:jjdxm-ijkplayer:1.0.5'
 
+    implementation ('com.dou361.ijkplayer:jjdxm-ijkplayer:1.0.6'){
+        exclude group: 'com.dou361.ijkplayer-armv7a', module: 'jjdxm-ijkplayer-armv7a'
+    }
 
 }
