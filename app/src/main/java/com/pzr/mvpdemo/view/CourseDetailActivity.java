@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -35,19 +38,27 @@ import com.mirkowu.basetoolbar.BaseToolbar;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.PushListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.util.V;
 
 public class CourseDetailActivity extends BaseActivity {
     private PlayerView player;
 
     private SlidingTabLayout mSlidingTabLayout;
+    private ImageView mIvClock;
     private ViewPager mViewPager;
     private CourseBean mCourseBean;
     private MyBroadcastReceiver mReceiver;
+    private Timer mTimer;
+    private Task mTask;
+
 
     private class MyBroadcastReceiver extends BroadcastReceiver {
         @Override
@@ -81,7 +92,13 @@ public class CourseDetailActivity extends BaseActivity {
         initTabView();
         doRegisterReceiver();
 
+
+        mIvClock = $(R.id.iv_clock);
+        mIvClock.setVisibility(View.GONE);
+
+
     }
+
 
     /**
      * 动态注册广播
@@ -109,7 +126,25 @@ public class CourseDetailActivity extends BaseActivity {
 
         initPlayer(mCourseBean.getVideoUrl());
 
+        showClock();
+
     }
+
+    private void showClock() {
+
+
+        int currentPosition = player.getCurrentPosition();
+        Log.e("ASDF", "ASD" + currentPosition);
+    }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            if (msg.what == 0x123) {
+                mIvClock.setVisibility(View.VISIBLE);
+            }
+        }
+    };
 
 
     public void initPlayer(LinkedHashMap<String, String> videoUrl) {
@@ -159,7 +194,37 @@ public class CourseDetailActivity extends BaseActivity {
                 })
                 .setPlaySource(list)
                 .startPlay();
+
+        mTimer = new Timer();
+        mTask = new Task();
+        //schedule 计划安排，时间表
+        mTimer.schedule(mTask, 1 * 1000, 1 * 1000);
     }
+
+
+    public class Task extends TimerTask {
+        @Override
+        public void run() {
+            Log.e("AAA", "开始执行执行timer定时任务...");
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (player.getCurrentPosition() > player.getDuration() - 1000) {
+                        mHandler.sendEmptyMessage(0x123);
+                        if (mTimer != null) {
+                            mTimer.cancel();
+                            mTimer = null;
+                        }
+                        if (mTask != null) {
+                            mTask.cancel();
+                            mTask = null;
+                        }
+                    }
+                }
+            });
+        }
+    }
+
 
     private void addTest() {
         SubCourseBean subCourseBean = new SubCourseBean();
@@ -232,6 +297,16 @@ public class CourseDetailActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+        if (mTask != null) {
+            mTask.cancel();
+            mTask = null;
+        }
+
         if (player != null) {
             player.onDestroy();
         }
