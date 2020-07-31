@@ -15,6 +15,9 @@ public class SubCourseBean extends BmobObject implements Serializable {
 
     private boolean nowPlay;
 
+    private CourseBean courseBean;
+
+
     public boolean isNowPlay() {
         return nowPlay;
     }
@@ -47,7 +50,7 @@ public class SubCourseBean extends BmobObject implements Serializable {
         this.duration = duration;
     }
 
-    private CourseBean courseBean;
+
 
     public CourseBean getCourseBean() {
         return courseBean;

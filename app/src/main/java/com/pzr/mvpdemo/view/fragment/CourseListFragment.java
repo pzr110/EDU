@@ -20,6 +20,7 @@ import com.pzr.mvpdemo.presenter.CourseListPresenter;
 import com.pzr.mvpdemo.view.adapter.SubCourseAdapter;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class CourseListFragment extends BaseFragment implements CourseListContract.ICourseListView {
@@ -52,7 +53,6 @@ public class CourseListFragment extends BaseFragment implements CourseListContra
         mRecyclerView = $(R.id.recyclerView);
 
         initView();
-
 
     }
 
@@ -103,6 +103,7 @@ public class CourseListFragment extends BaseFragment implements CourseListContra
 
                 Intent intent = new Intent();
                 intent.setAction("com.pzr.mvpdemo");
+                intent.putExtra("One",false);
                 intent.putExtra("subCourseBean", subCourseBean);
                 getActivity().sendBroadcast(intent);
 
@@ -113,7 +114,6 @@ public class CourseListFragment extends BaseFragment implements CourseListContra
                         mAdapter.getData().get(i).setNowPlay(false);
                     }
                 }
-
                 mAdapter.changeTextColor();
 
             }
@@ -140,6 +140,15 @@ public class CourseListFragment extends BaseFragment implements CourseListContra
         if (mSwipeRefreshLayout != null && mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
+        if (courseBeanList.size() > 0) {
+            Intent intent = new Intent();
+            intent.setAction("com.pzr.mvpdemo");
+            intent.putExtra("One",true);
+            intent.putExtra("oneSubCourseBean", courseBeanList.get(0));
+            getActivity().sendBroadcast(intent);
+        }
+
+//        ToastUtils.showShort("AAAAAAAAAAA");
         if (isRefresh) {
             // 此时是刷新
             mAdapter.setNewData(courseBeanList);

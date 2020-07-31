@@ -100,6 +100,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.ILoginV
     @Override
     public void success(User user) {
         SPUtils.getInstance().put("login", true);
+        SPUtils.getInstance().put("objectId", user.getObjectId());
         ActivityUtils.startActivity(MainActivity.class);
         finish();
 //        mTvLogin.setText("成功" + user.getUsername());

@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.blankj.utilcode.util.BarUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.dou361.ijkplayer.bean.VideoijkBean;
@@ -28,8 +29,13 @@ import com.dou361.ijkplayer.widget.PlayerView;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.pzr.mvpdemo.R;
 import com.pzr.mvpdemo.basemvp.BaseActivity;
+import com.pzr.mvpdemo.bean.CompleteBean;
 import com.pzr.mvpdemo.bean.CourseBean;
 import com.pzr.mvpdemo.bean.SubCourseBean;
+import com.pzr.mvpdemo.bean.User;
+import com.pzr.mvpdemo.contract.CourseDetailContract;
+import com.pzr.mvpdemo.inject.InjectPresenter;
+import com.pzr.mvpdemo.presenter.CourseDetailPresenter;
 import com.pzr.mvpdemo.view.adapter.MyFragmentPagerAdapter;
 import com.pzr.mvpdemo.view.fragment.CourseInfoFragment;
 import com.pzr.mvpdemo.view.fragment.CourseListFragment;
@@ -47,8 +53,9 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.PushListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.util.V;
+import tv.danmaku.ijk.media.player.IMediaPlayer;
 
-public class CourseDetailActivity extends BaseActivity {
+public class CourseDetailActivity extends BaseActivity implements CourseDetailContract.ICourseDetailView {
     private PlayerView player;
 
     private SlidingTabLayout mSlidingTabLayout;
@@ -56,18 +63,31 @@ public class CourseDetailActivity extends BaseActivity {
     private ViewPager mViewPager;
     private CourseBean mCourseBean;
     private MyBroadcastReceiver mReceiver;
-    private Timer mTimer;
-    private Task mTask;
+
+    @InjectPresenter
+    private CourseDetailPresenter mPresenter;
+
+
+//    private Timer mTimer;
+//    private Task mTask;
+
+//    private String currentUserId = "0";
+//    private String currentSubId = "0";
 
 
     private class MyBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            SubCourseBean subCourseBean = (SubCourseBean) intent.getSerializableExtra("subCourseBean");
-            LinkedHashMap<String, String> videoUrl = subCourseBean.getVideoUrl();
-
-            initPlayer(videoUrl);
-
+            boolean one = intent.getBooleanExtra("One", false);
+            if (one) {
+                SubCourseBean oneSubCourseBean = (SubCourseBean) intent.getSerializableExtra("oneSubCourseBean");
+                initPlayer(false, oneSubCourseBean);
+            } else {
+                SubCourseBean subCourseBean = (SubCourseBean) intent.getSerializableExtra("subCourseBean");
+                assert subCourseBean != null;
+                LinkedHashMap<String, String> videoUrl = subCourseBean.getVideoUrl();
+                initPlayer(true, subCourseBean);
+            }
         }
 
 
@@ -96,7 +116,6 @@ public class CourseDetailActivity extends BaseActivity {
         mIvClock = $(R.id.iv_clock);
         mIvClock.setVisibility(View.GONE);
 
-
     }
 
 
@@ -124,9 +143,9 @@ public class CourseDetailActivity extends BaseActivity {
     @Override
     protected void initData() {
 
-        initPlayer(mCourseBean.getVideoUrl());
+//        initPlayer(false, mCourseBean.getVideoUrl());
 
-        showClock();
+//        showClock();
 
     }
 
@@ -137,38 +156,43 @@ public class CourseDetailActivity extends BaseActivity {
         Log.e("ASDF", "ASD" + currentPosition);
     }
 
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            if (msg.what == 0x123) {
-                mIvClock.setVisibility(View.VISIBLE);
-            }
-        }
-    };
+//    Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(@NonNull Message msg) {
+//            if (msg.what == 0x123) {
+//
+//                mIvClock.setVisibility(View.VISIBLE);
+//
+//            }
+//        }
+//    };
 
 
-    public void initPlayer(LinkedHashMap<String, String> videoUrl) {
+    public void initPlayer(boolean seekTo0, SubCourseBean subCourseBean) {
 
         assert mCourseBean != null;
         String videoName = mCourseBean.getVideoName();
         String coverUrl = mCourseBean.getCoverUrl();
+
+//        SPUtils.getInstance().put("currentUserId","0");
+//        SPUtils.getInstance().put("currentSubId","0");
 
 //        LinkedHashMap<String, String> videoUrl = videoUrl;
 
         /**播放资源*/
         List<VideoijkBean> list = new ArrayList<VideoijkBean>();
 
-        if (videoUrl == null) {
+        if (subCourseBean.getVideoUrl() == null) {
             VideoijkBean videoijkBean = new VideoijkBean();
             videoijkBean.setStream("标清");
             videoijkBean.setUrl("#");
             list.add(videoijkBean);
             ToastUtils.showShort("暂无视频内容");
         } else {
-            for (String key : videoUrl.keySet()) {
+            for (String key : subCourseBean.getVideoUrl().keySet()) {
                 VideoijkBean videoijkBean = new VideoijkBean();
                 videoijkBean.setStream(key);
-                videoijkBean.setUrl(videoUrl.get(key));
+                videoijkBean.setUrl(subCourseBean.getVideoUrl().get(key));
                 list.add(videoijkBean);
             }
 
@@ -177,10 +201,28 @@ public class CourseDetailActivity extends BaseActivity {
 
         /**播放器*/
         player = new PlayerView(this)
-                .setTitle(videoName)
+                .setTitle(subCourseBean.getName())
                 .setScaleType(PlayStateParams.fitparent)
                 .hideMenu(true)
                 .forbidTouch(false)
+                .setShowSpeed(true)
+                .setOnInfoListener(new IMediaPlayer.OnInfoListener() {
+                    @Override
+                    public boolean onInfo(IMediaPlayer iMediaPlayer, int i, int i1) {
+                        if (i == 336) {
+                            String subId = subCourseBean.getObjectId();
+
+                            String courseId = mCourseBean.getObjectId();
+
+                            String userId = SPUtils.getInstance().getString("objectId");
+
+                            mPresenter.addCompleteUser(userId, subId,courseId);
+
+                            mIvClock.setVisibility(View.VISIBLE);
+                        }
+                        return false;
+                    }
+                })
                 .showThumbnail(new OnShowThumbnailListener() {
                     @Override
                     public void onShowThumbnail(ImageView ivThumbnail) {
@@ -192,38 +234,108 @@ public class CourseDetailActivity extends BaseActivity {
                                 .into(ivThumbnail);
                     }
                 })
-                .setPlaySource(list)
-                .startPlay();
-
-        mTimer = new Timer();
-        mTask = new Task();
-        //schedule 计划安排，时间表
-        mTimer.schedule(mTask, 1 * 1000, 1 * 1000);
-    }
+                .setPlaySource(list);
 
 
-    public class Task extends TimerTask {
-        @Override
-        public void run() {
-            Log.e("AAA", "开始执行执行timer定时任务...");
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (player.getCurrentPosition() > player.getDuration() - 1000) {
-                        mHandler.sendEmptyMessage(0x123);
-                        if (mTimer != null) {
-                            mTimer.cancel();
-                            mTimer = null;
-                        }
-                        if (mTask != null) {
-                            mTask.cancel();
-                            mTask = null;
-                        }
-                    }
-                }
-            });
+        if (seekTo0) {
+            player.seekTo(0);
+            Log.e("DetailTag", "NOW: " + player.getCurrentPosition());
         }
+
+
+        player.startPlay();
+
+//        mTimer = new Timer();
+//        mTask = new Task();
+//        //schedule 计划安排，时间表
+//        mTimer.schedule(mTask, 1 * 1000, 1 * 1000);
     }
+
+    @Override
+    public void addSuccess(String success) {
+        Log.e("DetailTag", "CG");
+    }
+
+    @Override
+    public void addFailed(String error) {
+        Log.e("DetailTag", "SB" + error);
+
+    }
+
+    private void addTestA(String userId, String subId) {
+        CompleteBean completeBean = new CompleteBean();
+
+        SubCourseBean subCourseBean = new SubCourseBean();
+        subCourseBean.setObjectId(subId);
+
+        completeBean.setSubCourseBean(subCourseBean);
+
+        User user = new User();
+        user.setObjectId(userId);
+
+        completeBean.setUser(user);
+        completeBean.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    Toast.makeText(CourseDetailActivity.this, "sucess", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void getTestA(String userId, String subId) {
+        BmobQuery<CompleteBean> bmobQuery = new BmobQuery<>();
+        bmobQuery.include("user");
+        User user = new User();
+        user.setObjectId(userId);
+        bmobQuery.addWhereEqualTo("user", user);
+
+        bmobQuery.include("sub");
+        SubCourseBean subCourseBean = new SubCourseBean();
+        subCourseBean.setObjectId(subId);
+        bmobQuery.addWhereEqualTo("sub", subCourseBean);
+        bmobQuery.findObjects(new FindListener<CompleteBean>() {
+            @Override
+            public void done(List<CompleteBean> list, BmobException e) {
+                if (e == null) {
+//                    ToastUtils.showShort(list.size() + "个");
+                    Log.e("ERROR", "CG");
+
+                } else {
+                    Log.e("ERRORASAD", "Error" + e.getMessage());
+                }
+            }
+        });
+
+    }
+
+//
+//    public class Task extends TimerTask {
+//        @Override
+//        public void run() {
+//            Log.e("AAA", "开始执行执行timer定时任务...");
+//            mHandler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Log.e("DetailTag", "NOW: " + player.getCurrentPosition() + "AA" + player.getDuration());
+//                    if (player.getCurrentPosition() > Math.abs(player.getDuration() - 1000)) {
+//                        mHandler.sendEmptyMessage(0x123);
+//
+//                        Log.e("DetailTag", "AA" + (mTimer != null));
+//                        if (mTimer != null) {
+//                            mTimer.cancel();
+//                            mTimer = null;
+//                        }
+//                        if (mTask != null) {
+//                            mTask.cancel();
+//                            mTask = null;
+//                        }
+//                    }
+//                }
+//            });
+//        }
+//    }
 
 
     private void addTest() {
@@ -298,14 +410,14 @@ public class CourseDetailActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer = null;
-        }
-        if (mTask != null) {
-            mTask.cancel();
-            mTask = null;
-        }
+//        if (mTimer != null) {
+//            mTimer.cancel();
+//            mTimer = null;
+//        }
+//        if (mTask != null) {
+//            mTask.cancel();
+//            mTask = null;
+//        }
 
         if (player != null) {
             player.onDestroy();
