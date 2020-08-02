@@ -66,6 +66,7 @@ public class CourseDetailActivity extends BaseActivity implements CourseDetailCo
 
     @InjectPresenter
     private CourseDetailPresenter mPresenter;
+    private String mSubSize;
 
 
 //    private Timer mTimer;
@@ -143,6 +144,8 @@ public class CourseDetailActivity extends BaseActivity implements CourseDetailCo
     @Override
     protected void initData() {
 
+        mPresenter.getSubSize(mCourseBean.getObjectId());
+
 //        initPlayer(false, mCourseBean.getVideoUrl());
 
 //        showClock();
@@ -216,9 +219,10 @@ public class CourseDetailActivity extends BaseActivity implements CourseDetailCo
 
                             String userId = SPUtils.getInstance().getString("objectId");
 
-                            mPresenter.addCompleteUser(userId, subId,courseId);
+                            mPresenter.addCompleteUser(userId, subId, courseId);
 
-                            mIvClock.setVisibility(View.VISIBLE);
+
+//                            mIvClock.setVisibility(View.VISIBLE);
                         }
                         return false;
                     }
@@ -251,14 +255,56 @@ public class CourseDetailActivity extends BaseActivity implements CourseDetailCo
 //        mTimer.schedule(mTask, 1 * 1000, 1 * 1000);
     }
 
+    private void getCompleteSize() {
+        BmobQuery<CompleteBean> bmobQuery = new BmobQuery<>();
+        bmobQuery.addWhereEqualTo("courseBean", mCourseBean.getObjectId());
+        bmobQuery.findObjects(new FindListener<CompleteBean>() {
+            @Override
+            public void done(List<CompleteBean> list, BmobException e) {
+                if (e == null) {
+                    Log.e("ListTAg", "Size:" + list.size());
+                } else {
+                    Log.e("ListTAg", "Error" + e.getMessage());
+                }
+            }
+        });
+    }
+
     @Override
     public void addSuccess(String success) {
         Log.e("DetailTag", "CG");
+
+        mPresenter.getCompleteSize(mCourseBean.getObjectId());
+
+//        getCompleteSize();
+
     }
 
     @Override
     public void addFailed(String error) {
-        Log.e("DetailTag", "SB" + error);
+
+    }
+
+    @Override
+    public void completeSizeSuccess(String success) {
+        if (mSubSize.equals(success)){
+            mIvClock.setVisibility(View.VISIBLE);
+        }
+        Log.e("AAAAAAAAAAA", "CG" + success);
+    }
+
+    @Override
+    public void completeSizeFailed(String error) {
+        Log.e("AAAAAAAAAAA", "SB" + error);
+    }
+
+    @Override
+    public void subSizeSuccess(String success) {
+        mSubSize = success;
+    }
+
+    @Override
+    public void subSizeFailed(String error) {
 
     }
 
