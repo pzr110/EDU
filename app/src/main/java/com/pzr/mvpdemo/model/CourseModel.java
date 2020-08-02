@@ -15,7 +15,6 @@ import cn.bmob.v3.listener.FindListener;
 
 public class CourseModel extends BaseModel implements CourseContract.ICourseModel {
 
-
     @Override
     public void getCourseList(int pageNum, boolean isRefresh, CallBackListener<List<CourseBean>, String> callBackListener) {
         BmobQuery<CourseBean> query = new BmobQuery<>();

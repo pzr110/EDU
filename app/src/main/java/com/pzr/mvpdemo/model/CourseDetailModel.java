@@ -4,6 +4,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.pzr.mvpdemo.basemvp.BaseModel;
+import com.pzr.mvpdemo.bean.ClockBean;
 import com.pzr.mvpdemo.bean.CompleteBean;
 import com.pzr.mvpdemo.bean.CourseBean;
 import com.pzr.mvpdemo.bean.SubCourseBean;
@@ -81,6 +82,36 @@ public class CourseDetailModel extends BaseModel implements CourseDetailContract
                 } else {
                     callBackListener.failed(e.getMessage());
                     Log.e("ListTAg", "Error" + e.getMessage());
+                }
+            }
+        });
+    }
+
+    @Override
+    public void addClock(String userId, String userName, String courseId,
+                         String courseName, String diary, CallBackListener<String, String> callBackListener) {
+        ClockBean clockBean = new ClockBean();
+
+        User user = new User();
+        user.setObjectId(userId);
+        clockBean.setUser(user);
+
+        clockBean.setUserName(userName);
+
+        CourseBean courseBean = new CourseBean();
+        courseBean.setObjectId(courseId);
+        clockBean.setCourseBean(courseBean);
+
+        clockBean.setCourseName(courseName);
+        clockBean.setDiary(diary);
+
+        clockBean.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    callBackListener.success("打卡成功");
+                } else {
+                    callBackListener.failed("" + e.getErrorCode());
                 }
             }
         });

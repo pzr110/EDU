@@ -51,5 +51,20 @@ public class CourseDetailPresenter extends BasePresenter<CourseDetailContract.IC
         });
     }
 
+    @Override
+    public void addClock(String userId, String userName, String courseId, String courseName, String diary) {
+        getModel().addClock(userId, userName, courseId, courseName, diary, new CallBackListener<String, String>() {
+            @Override
+            public void success(String bean) {
+                getView().clockSuccess(bean);
+            }
+
+            @Override
+            public void failed(String error) {
+                getView().clockFailed(error);
+            }
+        });
+    }
+
 
 }

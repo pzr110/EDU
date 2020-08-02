@@ -1,5 +1,6 @@
 package com.pzr.mvpdemo.view;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +10,13 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,8 +24,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.dou361.ijkplayer.bean.VideoijkBean;
@@ -67,6 +76,8 @@ public class CourseDetailActivity extends BaseActivity implements CourseDetailCo
     @InjectPresenter
     private CourseDetailPresenter mPresenter;
     private String mSubSize;
+    private String mUserId;
+    private String mUserName;
 
 
 //    private Timer mTimer;
@@ -116,6 +127,7 @@ public class CourseDetailActivity extends BaseActivity implements CourseDetailCo
 
         mIvClock = $(R.id.iv_clock);
         mIvClock.setVisibility(View.GONE);
+        mIvClock.setOnClickListener(this::widgetClick);
 
     }
 
@@ -143,8 +155,11 @@ public class CourseDetailActivity extends BaseActivity implements CourseDetailCo
 
     @Override
     protected void initData() {
+        mUserId = SPUtils.getInstance().getString("objectId");
+        mUserName = SPUtils.getInstance().getString("userName");
 
         mPresenter.getSubSize(mCourseBean.getObjectId());
+
 
 //        initPlayer(false, mCourseBean.getVideoUrl());
 
@@ -217,9 +232,8 @@ public class CourseDetailActivity extends BaseActivity implements CourseDetailCo
 
                             String courseId = mCourseBean.getObjectId();
 
-                            String userId = SPUtils.getInstance().getString("objectId");
 
-                            mPresenter.addCompleteUser(userId, subId, courseId);
+                            mPresenter.addCompleteUser(mUserId, subId, courseId);
 
 
 //                            mIvClock.setVisibility(View.VISIBLE);
@@ -287,7 +301,7 @@ public class CourseDetailActivity extends BaseActivity implements CourseDetailCo
 
     @Override
     public void completeSizeSuccess(String success) {
-        if (mSubSize.equals(success)){
+        if (mSubSize.equals(success)) {
             mIvClock.setVisibility(View.VISIBLE);
         }
         Log.e("AAAAAAAAAAA", "CG" + success);
@@ -301,11 +315,26 @@ public class CourseDetailActivity extends BaseActivity implements CourseDetailCo
     @Override
     public void subSizeSuccess(String success) {
         mSubSize = success;
+        mPresenter.getCompleteSize(mCourseBean.getObjectId());
+
     }
 
     @Override
     public void subSizeFailed(String error) {
 
+    }
+
+    @Override
+    public void clockSuccess(String success) {
+        ToastUtils.showShort(success);
+    }
+
+    @Override
+    public void clockFailed(String error) {
+        Log.e("TAGDGGD", "err" + error);
+        if (error.equals("401")) {
+            ToastUtils.showShort("已经打过卡了");
+        }
     }
 
     private void addTestA(String userId, String subId) {
@@ -425,6 +454,42 @@ public class CourseDetailActivity extends BaseActivity implements CourseDetailCo
 
     @Override
     public void widgetClick(View view) {
+        if (view.getId() == R.id.iv_clock) {
+//            Intent intent = new Intent(CourseDetailActivity.this, ClockActivity.class);
+//            intent.putExtra("courseBean", mCourseBean);
+//            startActivity(intent);
+//            finish();
+            showClockDialog();
+        }
+    }
+
+    private void showClockDialog() {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_clock, null, false);
+        AlertDialog mDialog = new AlertDialog.Builder(this).setView(view).create();
+        Window window = mDialog.getWindow();
+        //这一句消除白块
+
+        EditText et_diary = view.findViewById(R.id.et_diary);
+        TextView tv_time = view.findViewById(R.id.tv_time);
+        tv_time.setText(TimeUtils.getNowString());
+        view.findViewById(R.id.tv_submit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String diary = et_diary.getText().toString().equals("") ?
+                        et_diary.getHint().toString() : et_diary.getText().toString();
+
+                mPresenter.addClock(mUserId, mUserName,
+                        mCourseBean.getObjectId(), mCourseBean.getTitle(), diary);
+
+                mDialog.dismiss();
+            }
+        });
+
+
+        mDialog.show();
+
+        mDialog.getWindow().setLayout((ScreenUtils.getScreenWidth() / 5 * 4), LinearLayout.LayoutParams.WRAP_CONTENT);
 
     }
 

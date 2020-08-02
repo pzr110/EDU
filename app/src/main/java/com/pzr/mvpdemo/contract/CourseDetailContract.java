@@ -13,6 +13,8 @@ public interface CourseDetailContract {
         void getCompleteSize(String courseId, CallBackListener<String, String> callBackListener);
 
         void getSubSize(String courseId, CallBackListener<String, String> callBackListener);
+
+        void addClock(String userId, String userName, String courseId, String courseName, String diary, CallBackListener<String, String> callBackListener);
     }
 
     interface ICourseDetailView extends IBaseView {
@@ -27,6 +29,10 @@ public interface CourseDetailContract {
         void subSizeSuccess(String success);
 
         void subSizeFailed(String error);
+
+        void clockSuccess(String success);
+
+        void clockFailed(String error);
     }
 
     interface ICourseDetailPresenter extends IBasePresenter {
@@ -35,5 +41,7 @@ public interface CourseDetailContract {
         void getCompleteSize(String courseId);
 
         void getSubSize(String courseId);
+
+        void addClock(String userId, String userName, String courseId, String courseName, String diary);
     }
 }
