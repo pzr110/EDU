@@ -1,15 +1,19 @@
 package com.pzr.mvpdemo.view.fragment;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.pzr.mvpdemo.R;
 import com.pzr.mvpdemo.basemvp.BaseFragment;
 import com.pzr.mvpdemo.bean.User;
@@ -17,6 +21,7 @@ import com.pzr.mvpdemo.contract.MineContract;
 import com.pzr.mvpdemo.inject.InjectPresenter;
 import com.pzr.mvpdemo.presenter.MinePresenter;
 import com.pzr.mvpdemo.view.AboutActivity;
+import com.pzr.mvpdemo.view.MessageActivity;
 import com.pzr.mvpdemo.view.UserInfoActivity;
 
 public class MineFragment extends BaseFragment implements MineContract.IMineView {
@@ -24,6 +29,8 @@ public class MineFragment extends BaseFragment implements MineContract.IMineView
     private LinearLayout mLlInfo;
     private LinearLayout mLlService;
     private LinearLayout mLlAbout;
+    private LinearLayout mLlMessage;
+
 
     private User mUser;
 
@@ -42,6 +49,8 @@ public class MineFragment extends BaseFragment implements MineContract.IMineView
         mLlInfo = $(R.id.ll_info);
         mLlService = $(R.id.ll_service);
         mLlAbout = $(R.id.ll_about);
+
+        mLlMessage = $(R.id.ll_message);
 
 
     }
@@ -70,7 +79,15 @@ public class MineFragment extends BaseFragment implements MineContract.IMineView
                 ActivityUtils.startActivity(AboutActivity.class);
             }
         });
+
+        mLlMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityUtils.startActivity(MessageActivity.class);
+            }
+        });
     }
+
 
     @Override
     protected void initData() {
