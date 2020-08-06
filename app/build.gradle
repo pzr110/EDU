@@ -109,4 +109,6 @@ dependencies {
         exclude group: 'com.dou361.ijkplayer-armv7a', module: 'jjdxm-ijkplayer-armv7a'
     }
 
+    implementation 'com.tencent.bugly:crashreport:3.2.33'
+    implementation 'com.tencent.bugly:nativecrashreport:3.7.3'
 }

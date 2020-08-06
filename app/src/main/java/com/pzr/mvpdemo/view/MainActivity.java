@@ -2,6 +2,7 @@ package com.pzr.mvpdemo.view;
 
 import android.app.ProgressDialog;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -35,6 +36,9 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
 
     private MyAdapter mAdapter;
 
+    private long firstTime = 0;
+
+
     @InjectPresenter
     private MainPresenter mPresenter;
 
@@ -54,6 +58,8 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
 
     @Override
     protected void initData() {
+
+        int a = 5/0;
 
         initBottom();
 
@@ -122,5 +128,26 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
 
             }
         });
+    }
+
+    // 点击两次返回键退出APP
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+
+        long secondTime = System.currentTimeMillis();
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (secondTime - firstTime < 2000) {
+                System.exit(0);
+            } else {
+                Toast.makeText(getApplicationContext(), "再按一次退出", Toast.LENGTH_SHORT).show();
+                firstTime = System.currentTimeMillis();
+            }
+
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }
