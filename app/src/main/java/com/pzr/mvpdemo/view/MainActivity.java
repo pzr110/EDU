@@ -59,7 +59,6 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
     @Override
     protected void initData() {
 
-        int a = 5/0;
 
         initBottom();
 
